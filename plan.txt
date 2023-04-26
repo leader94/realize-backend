@@ -1,0 +1,7 @@
+#upload image
+/base/upload
+
+
+#video/gif upload
+/overlay/upload
+
