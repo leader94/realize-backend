@@ -1,7 +1,54 @@
+# API Response
+{
+    status: 'success'|'error'
+    res?: {},
+    err: {}
+}
+
 #upload image
-/base/upload
+/base/
 
 
 #video/gif upload
-/overlay/upload
+/overlay/
 
+
+# user 
+/user   - POST 
+/user/{userid}   - GET  
+{
+    "id": "12466434534",
+    "name": "Rohit Sharma",
+    "firstName": "Rohit",
+    "lastName": "Sharma",
+    "mobile": "9876543212",
+    "countryCode": "91",
+    "profilePhoto": "https://xsgames.co/randomusers/assets/avatars/male/73.jpg",
+    "projects": [
+        {
+            id:"",
+            title:"",
+            image:"",
+            scenes:[
+                {
+                    id:"",
+                    base:[], // currenly only 0
+                    overlay:[],
+                    overlayImage:[],
+                    baseImage:[]
+                }
+            ]
+        }
+    ]
+
+}
+
+
+//first time BE will send id of project 
+
+Database
+===============
+User -- as JSON
+pk              sk
+userid          meta                    ...              
+userid          projects-projectID      ... including scenes data 

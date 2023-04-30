@@ -1,10 +1,8 @@
 import {
   Controller,
-  FileTypeValidator,
-  MaxFileSizeValidator,
-  ParseFilePipe,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 
@@ -15,7 +13,7 @@ import { v4 as uuid } from 'uuid';
 
 @Controller('base')
 export class BaseUploadController {
-  @Post('upload')
+  @Post()
   @UseInterceptors(FileInterceptor('file', multerOptions))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     const response = {

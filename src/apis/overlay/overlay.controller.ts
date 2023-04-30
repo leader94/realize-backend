@@ -10,7 +10,7 @@ import { multerOptions } from './mutler.config';
 
 @Controller('overlay')
 export class OverlayUploadController {
-  @Post('upload')
+  @Post()
   @UseInterceptors(FileInterceptor('file', multerOptions))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(extname(file.originalname));
