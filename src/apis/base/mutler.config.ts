@@ -31,6 +31,7 @@ export const multerOptions = {
       );
     }
   },
+  /*
   // Storage properties
   storage: diskStorage({
     // Destination storage path details
@@ -48,4 +49,5 @@ export const multerOptions = {
       cb(null, `${uuid()}${extname(file.originalname)}`);
     },
   }),
+  */
 };

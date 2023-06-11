@@ -1,3 +1,7 @@
+D:\Downloads\Softwares\dynamo\dynamodb_local_latest>java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+dynamodb-admin
+
+D:\Downloads\Softwares> .\minio.exe server C:\minio --console-address :9090
 # API Response
 {
     status: 'success'|'error'
@@ -32,8 +36,20 @@
             scenes:[
                 {
                     id:"",
-                    base:[], // currenly only 0
-                    overlay:[],
+                    base:[{
+                            baseId: baseId,
+                            originalName: base.fileName,
+                            originalExtn: base.extn,
+                            localPath: base.localPath,
+                    },
+                    {}], // currenly only 0
+                    overlay:[{
+                                baseId: overlayId,
+                                originalName: overlay.fileName,
+                                originalExtn: overlay.extn,
+                                fileName: overlayId,
+                                localPath: overlay.localPath,
+                    }],
                     overlayImage:[],
                     baseImage:[]
                 }
@@ -48,7 +64,29 @@
 
 Database
 ===============
-User -- as JSON
-pk              sk
-userid          meta                    ...              
-userid          projects-projectID      ... including scenes data 
+LOGIN TABLE
+pk              sk              uuid
+mob             meta            userId
+
+
+User TABLE
+pk              sk              uuid
+userid          meta              name: 'User',      firstName: 'User',      lastName: '',      countryCode:91     mobile:       profilePhoto: 
+userid          pr-projectID      ... including scenes data 
+
+
+
+
+
+
+FLOWS
+/login 
+skip auth --> rather use local strategy
+
+validatelogin ---> find user else creates new user 
+getUser       
+returns user   
+
+---- ACTUAL ROUTE STarts here
+Login =-->  @Request() req   -- req.user 
+            craetes JWT token from user.id and returns jwt token and user object
