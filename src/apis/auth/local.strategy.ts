@@ -10,15 +10,22 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     private authService: AuthService,
     private userService: UsersService
   ) {
-    super({ usernameField: 'mobNo', passwordField: 'otp' });
+    super({ usernameField: 'id', passwordField: 'pass' });
   }
 
-  async validate(mobNo: string, otp: string): Promise<any> {
-    const loginDetails = await this.authService.validateLogin(mobNo, otp);
+  async validate(id: string, pass: string): Promise<any> {
+    const loginDetails = await this.authService.validateLogin(id, pass);
+    if (loginDetails instanceof Error) {
+      throw loginDetails;
+    }
     if (!loginDetails) {
       throw new UnauthorizedException();
     }
+
     const user = this.userService.getUser(loginDetails.uuid);
+    if (user instanceof Error) {
+      throw user;
+    }
     return user;
   }
 }

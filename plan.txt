@@ -1,4 +1,5 @@
 D:\Downloads\Softwares\dynamo\dynamodb_local_latest>java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+
 dynamodb-admin
 
 D:\Downloads\Softwares> .\minio.exe server C:\minio --console-address :9090

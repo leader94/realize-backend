@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { CacheService } from 'src/common/commonServices/cache/cache.service';
 import { DatabaseService } from 'src/common/commonServices/database.service';
 import { UtilityService } from 'src/common/commonServices/utility.service';
 import DBConstants from 'src/common/constants/db.constants';
@@ -11,27 +12,37 @@ export type User = any;
 export class UsersService {
   constructor(
     private readonly dbService: DatabaseService,
-    private readonly utils: UtilityService
+    private readonly utils: UtilityService,
+    private readonly cacheService: CacheService,
+    private readonly utilityService: UtilityService
   ) {}
 
-  async findLoginDetails(
-    username: string,
+  async findOrCreateLoginDetails(
+    id: string,
     pass: string
   ): Promise<User | undefined> {
     /**
-     * @todo
      * 1. verify otp
      * 2. fetch userId
      * 3. if not found create userId
      * 4. return user object corresponding to uuid
      */
-    // update this to return DB user instance
+
+    try {
+      const otpStr = await this.cacheService.getEntity(id + '_otp');
+      const otpObj = JSON.parse(otpStr ?? null);
+      if (otpObj?.otp !== pass) {
+        return new Error('Incorrect OTP');
+      }
+    } catch (e) {
+      return e;
+    }
 
     let loginDetails;
     const loginOptions = {
       collection: DBConstants.TABLES.LOGIN,
       identifiers: {
-        pk: username,
+        pk: id,
         sk: 'meta',
       },
     };
@@ -43,19 +54,29 @@ export class UsersService {
         return;
       }
       try {
-        loginDetails = await this.createUser(username);
+        loginDetails = await this.createUser(id);
       } catch (e) {
         // throw e;
         return;
       }
     }
 
+    await this.cacheService.deleteEntity(id + '_otp');
     return loginDetails;
   }
 
-  private async createUser(mobNum: string) {
+  private async createUser(id: string) {
     const userID = this.utils.getNewUUID();
     const projectId = this.utils.getNewProjectId();
+    let email, mobNum;
+    if (this.utilityService.isValidEmail(id)) {
+      email = id;
+      mobNum = '';
+    } else {
+      email = '';
+      mobNum = id;
+    }
+
     const userBody = {
       pk: userID,
       sk: 'meta',
@@ -63,13 +84,14 @@ export class UsersService {
       name: 'User',
       firstName: 'User',
       lastName: '',
+      email: email,
       countryCode: mobNum.split('__')?.[0],
       mobile: mobNum.split('__')?.[1],
       profilePhoto: 'https://api.multiavatar.com/' + userID + '.png',
     };
 
     const loginBody = {
-      pk: mobNum,
+      pk: id,
       sk: 'meta',
       uuid: userID,
     };
@@ -89,7 +111,7 @@ export class UsersService {
           create: {
             collection: DBConstants.TABLES.LOGIN,
             identifiers: {
-              pk: mobNum,
+              pk: id,
               sk: 'meta',
             },
             body: loginBody,
@@ -155,7 +177,7 @@ export class UsersService {
 
       return result;
     } catch (e) {
-      return e;
+      throw e;
     }
   }
   public async getUserProjects(userId: string) {
