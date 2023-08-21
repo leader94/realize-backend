@@ -37,3 +37,9 @@ lerna-debug.log*
 
 #uploads
 /uploads
+
+#local server start scripts
+/startDynamo.bat
+/startS3.bat
+/startRedis.bat
+/startDynamoDBAdmin.bat
