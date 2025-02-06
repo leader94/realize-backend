@@ -4,6 +4,8 @@ import { StorageService } from './storage.service';
 import { UtilityService } from './utility.service';
 import { EmailService } from './email.service';
 import { OtpService } from './otp.service';
+import { HttpService } from './http.service';
+import { HttpHelperService } from './httpHelper.service';
 
 @Module({
   controllers: [],
@@ -14,6 +16,8 @@ import { OtpService } from './otp.service';
     StorageService,
     EmailService,
     OtpService,
+    HttpService,
+    HttpHelperService,
   ],
   exports: [
     UtilityService,
@@ -21,6 +25,8 @@ import { OtpService } from './otp.service';
     StorageService,
     EmailService,
     OtpService,
+    HttpService,
+    HttpHelperService,
   ],
 })
-export class CommonServices {}
+export class CommonModule {}

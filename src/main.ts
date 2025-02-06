@@ -1,7 +1,9 @@
+process.env.DISABLE_AUTH_GUARD = 'TRUE';
+process.env.RUN_WITHOUT_CACHE = 'TRUE';
+
 import { NestFactory } from '@nestjs/core';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
 import { AppModule } from './app.module';
 
 const PORT = 3000;

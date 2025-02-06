@@ -10,29 +10,35 @@ import { AuthModule } from './apis/auth/auth.module';
 import { AppLoggerMiddleware } from './common/middlewares/AppLoggerMiddleware';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './apis/auth/jwt-auth.guard';
-import { CommonServices } from './common/commonServices/commonServices.module';
+import { CommonModule } from './common/commonServices/commonServices.module';
 import { SignedLinksModule } from './apis/signedLinks/signed-links.module';
 import { UsersModule } from './apis/users/users.module';
 import { ConfigsModule } from './apis/configs/configs.module';
+import { YouTubeModule } from './apis/youtube/youtube.module';
 
 @Module({
   imports: [
     LoggerModule.forRoot(),
-    CommonServices,
+    CommonModule,
     ConfigsModule,
     AuthModule,
     BaseUploadModule,
     TargetUploadModule,
     SignedLinksModule,
     UsersModule,
+    YouTubeModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+    ...(process.env.DISABLE_AUTH_GUARD === 'TRUE'
+      ? []
+      : [
+          {
+            provide: APP_GUARD,
+            useClass: JwtAuthGuard,
+          },
+        ]),
   ],
 })
 export class AppModule implements NestModule {

@@ -7,14 +7,14 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
-import { CommonServices } from 'src/common/commonServices/commonServices.module';
+import { CommonModule } from 'src/common/commonServices/commonServices.module';
 import { CacheModule } from 'src/common/commonServices/cache/cache.module';
 
 @Module({
   controllers: [AuthController],
   imports: [
     CacheModule,
-    CommonServices,
+    CommonModule,
     UsersModule,
     PassportModule,
     JwtModule.register({

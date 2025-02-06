@@ -7,7 +7,15 @@ export const cacheClientFactory: FactoryProvider<Promise<RedisClient>> = {
   useFactory: async () => {
     // TODO move redis url to process.env
     const client = createClient({ url: 'redis://localhost:6379/0' });
-    await client.connect();
+    try {
+      await client.connect();
+    } catch (err) {
+      if (process.env.RUN_WITHOUT_CACHE === 'TRUE') {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        return { on: () => {} } as unknown as RedisClient;
+      }
+      throw err;
+    }
     return client;
   },
 };
