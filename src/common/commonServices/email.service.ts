@@ -7,8 +7,8 @@ export class EmailService {
   private MAIL_SETTINGS = {
     service: 'gmail',
     auth: {
-      user: process.env.MAIL_EMAIL || 'weinspirehelp@gmail.com',
-      pass: process.env.MAIL_PASSWORD || 'llsjnwmdvkdsfmkb',
+      user: process.env.MAIL_EMAIL,
+      pass: process.env.MAIL_PASSWORD,
     },
   };
 
